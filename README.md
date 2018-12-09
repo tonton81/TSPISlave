@@ -11,12 +11,14 @@ SPI Slave Library for Teensy LC/3.x
   
    LC     HOST
   MISO -> MOSI
+ 
   MOSI -> MISO
   
   LC connections:
   
    LC     HOST
   MISO -> MISO
+ 
   MOSI -> MOSI
   
   Supported pin support for slaves' bus:
