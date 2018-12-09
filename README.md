@@ -10,6 +10,7 @@ SPI Slave Library for Teensy LC/3.x
   LC connections:
   
    LC     HOST
+  
   MISO -> MOSI
  
   MOSI -> MISO
@@ -17,6 +18,7 @@ SPI Slave Library for Teensy LC/3.x
   LC connections:
   
    LC     HOST
+  
   MISO -> MISO
  
   MOSI -> MOSI
