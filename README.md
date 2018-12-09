@@ -27,6 +27,13 @@ SPI Slave Library for Teensy LC/3.x
  
   MOSI -> MOSI
   
-  Supported pin support for slaves' bus:
+  
+    Supported pin support for slaves' bus:
  
-  // to be updated soon
+      Teensy LC:
+        SPI:  2,10,11,12,13,14
+        SPI1: 0,5,6,20
+      Teensy 3x:
+        SPI:  2,10,11,12,13,14
+        SPI1: 0,1,31,32
+        SPI2: 43,51,52,53
