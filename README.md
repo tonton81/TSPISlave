@@ -4,7 +4,7 @@ SPI Slave Library for Teensy LC/3.x
 
   SPI slave library designed for Teensy 3.x / LC. Allows one or more ports enabling with a unified, simple, sketch.
  
-  SPI0, SPI1, and SPI2 are supported accross all boards.
+  SPI, SPI1, and SPI2 are supported accross all boards.
  
   Supports multiple byte/word transfers.
  
