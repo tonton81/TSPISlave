@@ -121,10 +121,12 @@ bool TSPISlave::setSlaveMISO(uint8_t pin) {
     CORE_PIN12_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   else if ( pin == 51 ) {
     CORE_PIN51_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
+#endif
   return 0;
 }
 
@@ -145,10 +147,12 @@ bool TSPISlave::setSlaveMOSI(uint8_t pin) {
     CORE_PIN11_CONFIG = PORT_PCR_DSE | PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   else if ( pin == 52 ) {
     CORE_PIN52_CONFIG = PORT_PCR_DSE | PORT_PCR_MUX(2);
     return 1;
   }
+#endif
   return 0;
 }
 
@@ -169,10 +173,12 @@ bool TSPISlave::setSlaveCS(uint8_t pin) {
     CORE_PIN31_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 43 ) { // SPI2, T3.X
     CORE_PIN43_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_MUX(2);
     return 1;
   }
+#endif
   return 0;
 }
 
@@ -193,10 +199,12 @@ bool TSPISlave::setSlaveSCK(uint8_t pin) {
     CORE_PIN32_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 53 ) {
     CORE_PIN53_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
+#endif
   return 0;
 }
 
