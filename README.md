@@ -24,4 +24,5 @@ SPI Slave Library for Teensy LC/3.x
   MOSI -> MOSI
   
   Supported pin support for slaves' bus:
+ 
   // to be updated soon
