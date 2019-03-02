@@ -34,6 +34,9 @@
 #include "TSPISlave.h"
 #include "SPI.h"
 TSPISlave* TSPISlave::spi_slaves[3] = { nullptr, nullptr, nullptr };
+void tspi0_isr(void);
+void tspi1_isr(void);
+void tspi2_isr(void);
 
 TSPISlave::TSPISlave(SPIClass& _port, uint8_t _miso, uint8_t _mosi, uint8_t _sck, uint8_t _cs, uint8_t _fmsz) {
   port = &_port;
@@ -49,6 +52,7 @@ TSPISlave::TSPISlave(SPIClass& _port, uint8_t _miso, uint8_t _mosi, uint8_t _sck
     spi_map = 0x40076000;
 #endif
     spi_irq = IRQ_SPI0;
+    _VectorsRam[16 + IRQ_SPI0] = tspi0_isr;
     spi_slaves[0] = this;
   }
 #if defined(KINETISL) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
@@ -62,6 +66,7 @@ TSPISlave::TSPISlave(SPIClass& _port, uint8_t _miso, uint8_t _mosi, uint8_t _sck
     spi_map = 0x40077000;
 #endif
     spi_irq = IRQ_SPI1;
+    _VectorsRam[16 + IRQ_SPI1] = tspi1_isr;
     spi_slaves[1] = this;
   }
 #endif
@@ -70,6 +75,7 @@ TSPISlave::TSPISlave(SPIClass& _port, uint8_t _miso, uint8_t _mosi, uint8_t _sck
     SIM_SCGC3 |= SIM_SCGC3_SPI2; // enable slave clock
     spi_map = 0x400AC000;
     spi_irq = IRQ_SPI2;
+    _VectorsRam[16 + IRQ_SPI2] = tspi2_isr;
     spi_slaves[2] = this;
   }
 #endif
@@ -169,11 +175,11 @@ bool TSPISlave::setSlaveCS(uint8_t pin) {
     CORE_PIN10_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 31 ) {
     CORE_PIN31_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_MUX(2);
     return 1;
   }
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 43 ) { // SPI2, T3.X
     CORE_PIN43_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_MUX(2);
     return 1;
@@ -195,11 +201,11 @@ bool TSPISlave::setSlaveSCK(uint8_t pin) {
     CORE_PIN20_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 32 ) {
     CORE_PIN32_CONFIG = PORT_PCR_MUX(2);
     return 1;
   }
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
   if ( pin == 53 ) {
     CORE_PIN53_CONFIG = PORT_PCR_MUX(2);
     return 1;
@@ -244,7 +250,7 @@ uint16_t TSPISlave::popr() {
   return 1;
 }
 
-void spi0_isr(void) {
+void tspi0_isr(void) {
   if ( TSPISlave::spi_slaves[0] && TSPISlave::spi_slaves[0]->_spihandler ) {
     TSPISlave::spi_slaves[0]->_spihandler();
   }
@@ -268,7 +274,7 @@ void spi0_isr(void) {
 #endif
 }
 
-void spi1_isr(void) {
+void tspi1_isr(void) {
   if ( TSPISlave::spi_slaves[1] && TSPISlave::spi_slaves[1]->_spihandler ) {
     TSPISlave::spi_slaves[1]->_spihandler();
   }
@@ -292,7 +298,7 @@ void spi1_isr(void) {
 }
 
 #if defined(__MK64FX512__) || defined(__MK66FX1M0__)
-void spi2_isr(void) {
+void tspi2_isr(void) {
   if ( TSPISlave::spi_slaves[2] && TSPISlave::spi_slaves[2]->_spihandler ) {
     TSPISlave::spi_slaves[2]->_spihandler();
   }
@@ -300,6 +306,7 @@ void spi2_isr(void) {
     SPI2_PUSHR_SLAVE = 0;
     SPI2_POPR;
   }
+  SPI2_MCR |= SPI_MCR_CLR_TXF;
   SPI2_SR |= SPI_SR_RFDF;
 }
 #endif
