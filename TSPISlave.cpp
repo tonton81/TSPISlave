@@ -306,7 +306,6 @@ void tspi2_isr(void) {
     SPI2_PUSHR_SLAVE = 0;
     SPI2_POPR;
   }
-  SPI2_MCR |= SPI_MCR_CLR_TXF;
   SPI2_SR |= SPI_SR_RFDF;
 }
 #endif
